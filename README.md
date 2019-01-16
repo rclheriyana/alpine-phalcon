@@ -1,6 +1,6 @@
-# Nginx PHP MySQL [![Build Status](https://travis-ci.org/nanoninja/docker-nginx-php-mysql.svg?branch=master)](https://travis-ci.org/nanoninja/docker-nginx-php-mysql) [![GitHub version](https://badge.fury.io/gh/nanoninja%2Fdocker-nginx-php-mysql.svg)](https://badge.fury.io/gh/nanoninja%2Fdocker-nginx-php-mysql)
+# Nginx PHP Phalcon
 
-Docker running Nginx, PHP-FPM, Composer, MySQL and PHPMyAdmin.
+Docker running Nginx, PHP-FPM, Composer, Alpine and Phalcon PHP Framework.
 
 ## Overview
 
@@ -12,23 +12,15 @@ Docker running Nginx, PHP-FPM, Composer, MySQL and PHPMyAdmin.
 
     We’ll download the code from its repository on GitHub.
 
-3. [Configure Nginx With SSL Certificates](#configure-nginx-with-ssl-certificates) [`Optional`]
-
-    We'll generate and configure SSL certificate for nginx before running server.
-
-4. [Configure Xdebug](#configure-xdebug) [`Optional`]
+3. [Configure Xdebug](#configure-xdebug) [`Optional`]
 
     We'll configure Xdebug for IDE (PHPStorm or Netbeans).
 
-5. [Run the application](#run-the-application)
+4. [Run the application](#run-the-application)
 
     By this point we’ll have all the project pieces in place.
 
-6. [Use Makefile](#use-makefile) [`Optional`]
-
-    When developing, you can use `Makefile` for doing recurrent operations.
-
-7. [Use Docker Commands](#use-docker-commands)
+5. [Use Docker Commands](#use-docker-commands)
 
     When running, you can use docker commands for doing recurrent operations.
 
@@ -36,7 +28,7 @@ ___
 
 ## Install prerequisites
 
-For now, this project has been mainly created for Unix `(Linux/MacOS)`. Perhaps it could work on Windows.
+For now, this project has been mainly created for Unix `(Linux/MacOS)`..
 
 All requisites should be available for your distribution. The most important are :
 
@@ -44,7 +36,7 @@ All requisites should be available for your distribution. The most important are
 * [Docker](https://docs.docker.com/engine/installation/)
 * [Docker Compose](https://docs.docker.com/compose/install/)
 
-Check if `docker-compose` is already installed by entering the following command : 
+Check if `docker-compose` is already installed by entering the following command :
 
 ```sh
 which docker-compose
@@ -69,11 +61,8 @@ sudo apt install build-essential
 ### Images to use
 
 * [Nginx](https://hub.docker.com/_/nginx/)
-* [MySQL](https://hub.docker.com/_/mysql/)
-* [PHP-FPM](https://hub.docker.com/r/nanoninja/php-fpm/)
+* [PHP-FPM](https://hub.docker.com/_/php/)
 * [Composer](https://hub.docker.com/_/composer/)
-* [PHPMyAdmin](https://hub.docker.com/r/phpmyadmin/phpmyadmin/)
-* [Generate Certificate](https://hub.docker.com/r/jacoelho/generate-certificate/)
 
 You should be careful when installing third party web servers such as MySQL or Nginx.
 
@@ -81,10 +70,7 @@ This project use the following ports :
 
 | Server     | Port |
 |------------|------|
-| MySQL      | 8989 |
-| PHPMyAdmin | 8080 |
-| Nginx      | 8000 |
-| Nginx SSL  | 3000 |
+| Nginx      | 80 |
 
 ___
 
@@ -93,13 +79,13 @@ ___
 To install [Git](http://git-scm.com/book/en/v2/Getting-Started-Installing-Git), download it and install following the instructions :
 
 ```sh
-git clone https://github.com/nanoninja/docker-nginx-php-mysql.git
+git clone https://github.com/rclheriyana/alpine-phalcon
 ```
 
 Go to the project directory :
 
 ```sh
-cd docker-nginx-php-mysql
+cd alpine-phalcon
 ```
 
 ### Project tree
@@ -114,6 +100,7 @@ cd docker-nginx-php-mysql
 │       └── mysql
 ├── doc
 ├── docker-compose.yml
+├── Dockerfile
 ├── etc
 │   ├── nginx
 │   │   ├── default.conf
@@ -133,36 +120,6 @@ cd docker-nginx-php-mysql
     └── public
         └── index.php
 ```
-
-___
-
-## Configure Nginx With SSL Certificates
-
-You can change the host name by editing the `.env` file.
-
-If you modify the host name, do not forget to add it to the `/etc/hosts` file.
-
-1. Generate SSL certificates
-
-    ```sh
-    source .env && sudo docker run --rm -v $(pwd)/etc/ssl:/certificates -e "SERVER=$NGINX_HOST" jacoelho/generate-certificate
-    ```
-
-2. Configure Nginx
-
-    Do not modify the `etc/nginx/default.conf` file, it is overwritten by  `etc/nginx/default.template.conf`
-
-    Edit nginx file `etc/nginx/default.template.conf` and uncomment the SSL server section :
-
-    ```sh
-    # server {
-    #     server_name ${NGINX_HOST};
-    #
-    #     listen 443 ssl;
-    #     fastcgi_param HTTPS on;
-    #     ...
-    # }
-    ```
 
 ___
 
@@ -189,10 +146,10 @@ ___
 
 ## Run the application
 
-1. Copying the composer configuration file : 
+1. Put the project on the web directory :
 
     ```sh
-    cp web/app/composer.json.dist web/app/composer.json
+    cd web/ && git clone <project>
     ```
 
 2. Start the application :
@@ -221,25 +178,6 @@ ___
 
 ___
 
-## Use Makefile
-
-When developing, you can use [Makefile](https://en.wikipedia.org/wiki/Make_(software)) for doing the following operations :
-
-| Name          | Description                                  |
-|---------------|----------------------------------------------|
-| apidoc        | Generate documentation of API                |
-| clean         | Clean directories for reset                  |
-| code-sniff    | Check the API with PHP Code Sniffer (`PSR2`) |
-| composer-up   | Update PHP dependencies with composer        |
-| docker-start  | Create and start containers                  |
-| docker-stop   | Stop and clear all services                  |
-| gen-certs     | Generate SSL certificates for `nginx`        |
-| logs          | Follow log output                            |
-| mysql-dump    | Create backup of all databases               |
-| mysql-restore | Restore backup of all databases              |
-| phpmd         | Analyse the API with PHP Mess Detector       |
-| test          | Test application with phpunit                |
-
 ### Examples
 
 Start the application :
@@ -253,7 +191,6 @@ Show help :
 ```sh
 make help
 ```
-
 ___
 
 ## Use Docker commands
@@ -305,67 +242,8 @@ sudo docker-compose exec -T php ./app/vendor/bin/phpmd ./app/src text cleancode,
 ```sh
 sudo docker-compose exec php php -m
 ```
-
-### Handling database
-
-#### MySQL shell access
-
-```sh
-sudo docker exec -it mysql bash
-```
-
-and
-
-```sh
-mysql -u"$MYSQL_ROOT_USER" -p"$MYSQL_ROOT_PASSWORD"
-```
-
-#### Creating a backup of all databases
-
-```sh
-mkdir -p data/db/dumps
-```
-
-```sh
-source .env && sudo docker exec $(sudo docker-compose ps -q mysqldb) mysqldump --all-databases -u"$MYSQL_ROOT_USER" -p"$MYSQL_ROOT_PASSWORD" > "data/db/dumps/db.sql"
-```
-
-#### Restoring a backup of all databases
-
-```sh
-source .env && sudo docker exec -i $(sudo docker-compose ps -q mysqldb) mysql -u"$MYSQL_ROOT_USER" -p"$MYSQL_ROOT_PASSWORD" < "data/db/dumps/db.sql"
-```
-
-#### Creating a backup of single database
-
-**`Notice:`** Replace "YOUR_DB_NAME" by your custom name.
-
-```sh
-source .env && sudo docker exec $(sudo docker-compose ps -q mysqldb) mysqldump -u"$MYSQL_ROOT_USER" -p"$MYSQL_ROOT_PASSWORD" --databases YOUR_DB_NAME > "data/db/dumps/YOUR_DB_NAME_dump.sql"
-```
-
-#### Restoring a backup of single database
-
-```sh
-source .env && sudo docker exec -i $(sudo docker-compose ps -q mysqldb) mysql -u"$MYSQL_ROOT_USER" -p"$MYSQL_ROOT_PASSWORD" < "data/db/dumps/YOUR_DB_NAME_dump.sql"
-```
-
-
-#### Connecting MySQL from [PDO](http://php.net/manual/en/book.pdo.php)
-
-```php
-<?php
-    try {
-        $dsn = 'mysql:host=mysql;dbname=test;charset=utf8;port=3306';
-        $pdo = new PDO($dsn, 'dev', 'dev');
-    } catch (PDOException $e) {
-        echo $e->getMessage();
-    }
-?>
-```
-
 ___
 
-## Help us
+## Created by me ???
 
-Any thought, feedback or (hopefully not!)# alpine-phalcon
+No it just fork and modification from [docker-nginx-php-mysql](https://github.com/nanoninja/docker-nginx-php-mysql)
