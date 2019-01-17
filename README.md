@@ -242,8 +242,3 @@ sudo docker-compose exec -T php ./app/vendor/bin/phpmd ./app/src text cleancode,
 ```sh
 sudo docker-compose exec php php -m
 ```
-___
-
-## Created by me ???
-
-No it just fork and modification from [docker-nginx-php-mysql](https://github.com/nanoninja/docker-nginx-php-mysql)

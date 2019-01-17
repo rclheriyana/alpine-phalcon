@@ -12,20 +12,27 @@ RUN apk update && apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/
     autoconf \
     file \
     libtool \
+    libpng \
+    libpng-dev \
     re2c \
     pcre-dev \
-    # iconv & gd
     gnu-libiconv \
+    # iconv & gd
     php7-iconv \
     php7-gd \
+    php7-intl \
+    php7-xsl \
     php7-redis \
     php7-dev \
     php7-pear \
     php7-mysqli \
     php7-pdo \
     php7-pdo_mysql \
+    php7-curl \
     && \
     # docker ext
+    docker-php-ext-install curl && \
+    docker-php-ext-install gd && \
     docker-php-ext-install pdo_mysql && \
     # phalcon php
     set -xe && \
@@ -44,6 +51,9 @@ RUN apk update && apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/
     file \
     libtool \
     re2c \
+    libpng \
+    libpng-dev \
+    gnu-libiconv \
     pcre-dev \
     php7-dev \
     php7-pear \
