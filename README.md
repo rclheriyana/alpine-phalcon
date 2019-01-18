@@ -92,13 +92,6 @@ cd alpine-phalcon
 
 ```sh
 .
-├── Makefile
-├── README.md
-├── data
-│   └── db
-│       ├── dumps
-│       └── mysql
-├── doc
 ├── docker-compose.yml
 ├── Dockerfile
 ├── etc
@@ -109,14 +102,6 @@ cd alpine-phalcon
 │   │   └── php.ini
 │   └── ssl
 └── web
-    ├── app
-    │   ├── composer.json.dist
-    │   ├── phpunit.xml.dist
-    │   ├── src
-    │   │   └── Foo.php
-    │   └── test
-    │       ├── FooTest.php
-    │       └── bootstrap.php
     └── public
         └── index.php
 ```
@@ -236,7 +221,7 @@ sudo docker-compose exec -T php ./app/vendor/bin/phpcs -v --standard=PSR2 ./app/
 ```sh
 sudo docker-compose exec -T php ./app/vendor/bin/phpmd ./app/src text cleancode,codesize,controversial,design,naming,unusedcode
 ```
-
+s
 ### Checking installed PHP extensions
 
 ```sh
