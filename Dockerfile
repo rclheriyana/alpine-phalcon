@@ -28,7 +28,9 @@ RUN apk update && apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/
     php7-mysqli \
     php7-pdo \
     php7-pdo_mysql \
-    php7-curl \
+    curl \
+    libcurl \
+    curl-dev \
     && \
     # docker ext
     docker-php-ext-install curl && \
