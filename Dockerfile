@@ -31,11 +31,18 @@ RUN apk update && apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/
     curl \
     libcurl \
     curl-dev \
+    libxslt-dev \
+    libmcrypt-dev \
     && \
     # docker ext
     docker-php-ext-install curl && \
+    docker-php-ext-install calendar && \
+    docker-php-ext-install xsl && \
+    docker-php-ext-install mbstring && \
     docker-php-ext-install gd && \
     docker-php-ext-install pdo_mysql && \
+    docker-php-ext-install mysqli && \
+    docker-php-ext-install mcrypt && \
     # phalcon php
     set -xe && \
     curl -LO https://github.com/phalcon/cphalcon/archive/v${PHALCON_VERSION}.tar.gz && \
@@ -59,4 +66,4 @@ RUN apk update && apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/
     pcre-dev \
     php7-dev \
     php7-pear \
-    && rm -rf /var/cache/apk/*
+    && rm -rf /var/cache/apk/* 
